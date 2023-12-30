@@ -1,6 +1,14 @@
 ﻿using AutoMapper;
+using Entities.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Web_Api.BLL.Profiles;
+using System.Text;
+using web_Api.Profiles;
+using Web_Api.DAL.Context;
 
 namespace web_Api.Extensions
 {
@@ -16,7 +24,7 @@ namespace web_Api.Extensions
                 new ReaderProfile()
             }));
 
-            services.AddScoped<IMapper>(m => new Mapper(config));
+            services.AddSingleton<IMapper>(m => new Mapper(config));
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
@@ -46,6 +54,39 @@ namespace web_Api.Extensions
                         new string[]{}
                     }
                 });
+            });
+        }
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<UserContext>();
+
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Password.RequireUppercase = true;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireDigit = true;
+                opt.Password.RequireNonAlphanumeric = false;
+
+                opt.User.RequireUniqueEmail = true;
+            });
+        }
+        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSetting = configuration.GetSection("JwtSetting");
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSetting.GetSection("Issuer").Value,
+                ValidAudience = jwtSetting.GetSection("Audience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.GetSection("SecurityKey").Value))
             });
         }
     }

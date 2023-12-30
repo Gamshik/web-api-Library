@@ -2,7 +2,7 @@
 using Entites.DataTransferObjects.ReaderDtos;
 using Entites.Entities;
 
-namespace Web_Api.BLL.Profiles
+namespace web_Api.Profiles
 {
     public class ReaderProfile : Profile
     {

@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddDbContext<LibraryContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), db => db.MigrationsAssembly("web-Api")));
+builder.Services.AddDbContext<UserContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("UserConnection"), db => db.MigrationsAssembly("web-Api")));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,6 +24,11 @@ builder.Services.AddSwaggerGen();
 //builder.Services.ConfigureSwagger();
 
 builder.Services.ConfigureMapper();
+
+builder.Services.ConfigureIdentity();
+
+builder.Services.AddAuthorization();
+builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
@@ -42,6 +48,7 @@ builder.Services.AddScoped<IValidator<Reader>, ReaderValidator>();
 var app = builder.Build();
 
 app.MigrateDatabase<LibraryContext>();
+app.MigrateDatabase<UserContext>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
