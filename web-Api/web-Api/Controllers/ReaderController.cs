@@ -1,9 +1,11 @@
 ﻿using Entites.DataTransferObjects.ReaderDtos;
 using Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace web_Api.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/reader")]
     [ApiController]
     public class ReaderController : Controller

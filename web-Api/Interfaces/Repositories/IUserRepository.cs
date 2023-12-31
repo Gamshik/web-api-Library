@@ -11,6 +11,6 @@ namespace Interfaces.Repositories
     public interface IUserRepository
     {
         Task<IdentityResult> RegisterUserAsync(User user, string password, CancellationToken cancellationToken = default);
-        Task<Jwt?> AuthorizeAsync(User user, string password, CancellationToken cancellationToken = default);
+        Task<bool> AuthenticateAsync(User user, string password, CancellationToken cancellationToken = default);
     }
 }

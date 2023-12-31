@@ -21,26 +21,53 @@ namespace web_Api.Extensions
                 new AuthorProfile(),
                 new BookProfile(),
                 new IssueProfile(),
-                new ReaderProfile()
+                new ReaderProfile(),
+                new UserProfile(),
             }));
 
             services.AddSingleton<IMapper>(m => new Mapper(config));
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
+            //services.AddSwaggerGen(s =>
+            //{
+            //    s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovate work Api", Version = "v1" });
+            //    s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //    {
+            //        In = ParameterLocation.Header,
+            //        Description = "Please enter a valid token",
+            //        Name = "Authorization",
+            //        Type = SecuritySchemeType.Http,
+            //        BearerFormat = "JWT",
+            //        Scheme = "Bearer"
+            //    });
+            //    s.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //    {
+            //        {
+            //            new OpenApiSecurityScheme
+            //            {
+            //                Reference = new OpenApiReference
+            //                {
+            //                    Type = ReferenceType.SecurityScheme,
+            //                    Id = "Bearer"
+            //                }
+            //            },
+            //            new string[]{}
+            //        }
+            //    });
+            //});
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovate work Api", Version = "v1" });
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovatework API", Version = "v1" });
                 s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
+                    Description = "Place to add JWT with Bearer",
                     Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
+                    Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-                s.AddSecurityRequirement(new OpenApiSecurityRequirement
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
                         new OpenApiSecurityScheme
@@ -49,9 +76,10 @@ namespace web_Api.Extensions
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
-                            }
+                            },
+                            Name = "Bearer",
                         },
-                        new string[]{}
+                        new List<string>()
                     }
                 });
             });
@@ -68,6 +96,9 @@ namespace web_Api.Extensions
                 opt.Password.RequireNonAlphanumeric = false;
 
                 opt.User.RequireUniqueEmail = true;
+
+                opt.SignIn.RequireConfirmedPhoneNumber = false;
+                opt.SignIn.RequireConfirmedEmail = false;
             });
         }
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)

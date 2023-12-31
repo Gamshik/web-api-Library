@@ -1,5 +1,6 @@
 ﻿using Entities.Entities;
 using Interfaces.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,24 @@ namespace Web_Api.DAL.Repositories
             _userManager = userManager;
         }
         public async Task<IdentityResult> RegisterUserAsync(User user, string password, CancellationToken cancellationToken = default)
-        {
-            return await _userManager.CreateAsync(user, password);
+        { 
+            var result = await _userManager.CreateAsync(user, password);
+            await _userManager.AddToRoleAsync(user, "Visitor");
+            //await _userManager.AddToRoleAsync(user, "Admin");
+            return result;
         }
-        public Task<Jwt?> AuthorizeAsync(User user, string password, CancellationToken cancellationToken = default)
+        public async Task<bool> AuthenticateAsync(User user, string password, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var foundUser = await _userManager.FindByEmailAsync(user.Email);
+
+            if (foundUser != null)
+            {
+                var result = await _userManager.CheckPasswordAsync(foundUser, password);
+
+                return result;
+            }
+
+            return false;
         }
     }
 }

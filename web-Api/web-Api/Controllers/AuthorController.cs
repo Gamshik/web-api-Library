@@ -1,9 +1,11 @@
 ﻿using Entites.DataTransferObjects.AuthorDtos;
 using Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace web_Api.Controllers
 {
+    [Authorize(Roles = "Visitor")]
     [Route("api/author")]
     [ApiController]
     public class AuthorController : Controller
