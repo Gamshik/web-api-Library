@@ -32,10 +32,10 @@ namespace Web_Api.BLL.Services
         public async Task<Jwt?> AuthorizeAsync(UserForAuthorizeDto userForAuthorizeDto, CancellationToken cancellationToken = default)
         {
             var user = _mapper.Map<User>(userForAuthorizeDto);
-            var isAuthenticate = await _userRepository.AuthenticateAsync(user, userForAuthorizeDto.Password, cancellationToken);
-            if (isAuthenticate)
+            var authenticateUser = await _userRepository.AuthenticateAsync(user, userForAuthorizeDto.Password, cancellationToken);
+            if (authenticateUser != null)
             {
-                return await _jwtProvider.CreateJwtAsync(user, cancellationToken);
+                return await _jwtProvider.CreateJwtAsync(authenticateUser, cancellationToken);
             }
             return null;
         }

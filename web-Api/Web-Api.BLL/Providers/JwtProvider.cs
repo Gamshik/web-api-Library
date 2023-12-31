@@ -45,7 +45,7 @@ namespace Web_Api.BLL.Providers
 
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-            return new Jwt { Token = token, Claims = claims };
+            return new Jwt { Token = token };
         }
 
         private async Task<List<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken = default)
@@ -61,7 +61,6 @@ namespace Web_Api.BLL.Providers
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-
             return claims;
         }
         private SigningCredentials GetSigningCredentials()

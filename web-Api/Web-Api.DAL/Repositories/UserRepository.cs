@@ -24,18 +24,21 @@ namespace Web_Api.DAL.Repositories
             //await _userManager.AddToRoleAsync(user, "Admin");
             return result;
         }
-        public async Task<bool> AuthenticateAsync(User user, string password, CancellationToken cancellationToken = default)
+        public async Task<User?> AuthenticateAsync(User user, string password, CancellationToken cancellationToken = default)
         {
             var foundUser = await _userManager.FindByEmailAsync(user.Email);
 
             if (foundUser != null)
             {
-                var result = await _userManager.CheckPasswordAsync(foundUser, password);
+                if (await _userManager.CheckPasswordAsync(foundUser, password))
+                {
+                    return foundUser;
+                }
 
-                return result;
+                return null;
             }
 
-            return false;
+            return null;
         }
     }
 }

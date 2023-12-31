@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace web_Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Visitor, Admin")]
     [Route("api/book")]
     [ApiController]
     public class BookController : Controller
@@ -23,7 +23,6 @@ namespace web_Api.Controllers
 
             return Ok();
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllBooksAsync(CancellationToken cancellationToken = default)
         {
