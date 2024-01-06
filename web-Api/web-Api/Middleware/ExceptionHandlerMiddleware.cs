@@ -1,14 +1,17 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using Entities.ErrorModels;
+using Interfaces.Managers;
+using System.Net;
 
 namespace web_Api.Middleware
 {
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        private readonly ILoggerManager _loggerManager;
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILoggerManager loggerManager)
         {
             _next = next;
+            _loggerManager = loggerManager;
         }
         public async Task Invoke(HttpContext httpContext)
         {
@@ -18,23 +21,25 @@ namespace web_Api.Middleware
             }
             catch (Exception ex)
             {
-                await HandlerExceptionMessageAsync(httpContext, ex);
+                await HandlerExceptionMessageAsync(httpContext, ex, _loggerManager);
             }
         }
-        private static async Task HandlerExceptionMessageAsync(HttpContext httpContext, Exception exception)
+        private static async Task HandlerExceptionMessageAsync(HttpContext httpContext, Exception exception, ILoggerManager logger)
         {
             int statusCode = (int)HttpStatusCode.InternalServerError;
 
-            var result = JsonSerializer.Serialize(new
-            {
-                StatusCode = statusCode,
-                ErrorMesage = exception.Message
-            });
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = statusCode;
 
-            await httpContext.Response.WriteAsync(result);
+            logger.LogError("Something went wrong " + exception.Message);
+
+            await httpContext.Response.WriteAsync(new ErrorDetails
+            {
+                StatusCode = statusCode,
+                Message = "Internal Server error!"
+
+            }.ToString());
         }
     }
 }

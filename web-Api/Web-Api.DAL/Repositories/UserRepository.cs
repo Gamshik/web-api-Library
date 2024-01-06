@@ -1,12 +1,6 @@
 ﻿using Entities.Entities;
 using Interfaces.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Web_Api.DAL.Repositories
 {
@@ -18,7 +12,7 @@ namespace Web_Api.DAL.Repositories
             _userManager = userManager;
         }
         public async Task<IdentityResult> RegisterUserAsync(User user, string password, CancellationToken cancellationToken = default)
-        { 
+        {
             var result = await _userManager.CreateAsync(user, password);
             await _userManager.AddToRoleAsync(user, "Visitor");
             //await _userManager.AddToRoleAsync(user, "Admin");

@@ -1,19 +1,35 @@
 ﻿using AutoMapper;
+using Entites.Entities;
 using Entities.Entities;
+using FluentValidation;
+using Interfaces.Managers;
+using Interfaces.Providers;
+using Interfaces.Repositories;
+using Interfaces.Services;
+using LoggerService.Managers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
 using System.Text;
 using web_Api.Profiles;
+using Web_Api.BLL.Providers;
+using Web_Api.BLL.Services;
+using Web_Api.BLL.Validation;
 using Web_Api.DAL.Context;
+using Web_Api.DAL.Repositories;
 
 namespace web_Api.Extensions
 {
     public static class ServiceExtension
     {
+        public static void ConfigureContexts(this IServiceCollection services, WebApplicationBuilder builder)
+        {
+            services.AddDbContext<LibraryContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), db => db.MigrationsAssembly("web-Api")));
+            services.AddDbContext<UserContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("UserConnection"), db => db.MigrationsAssembly("web-Api")));
+        }
         public static void ConfigureMapper(this IServiceCollection services)
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfiles(new List<Profile>
@@ -29,45 +45,19 @@ namespace web_Api.Extensions
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
-            //services.AddSwaggerGen(s =>
-            //{
-            //    s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovate work Api", Version = "v1" });
-            //    s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            //    {
-            //        In = ParameterLocation.Header,
-            //        Description = "Please enter a valid token",
-            //        Name = "Authorization",
-            //        Type = SecuritySchemeType.Http,
-            //        BearerFormat = "JWT",
-            //        Scheme = "Bearer"
-            //    });
-            //    s.AddSecurityRequirement(new OpenApiSecurityRequirement
-            //    {
-            //        {
-            //            new OpenApiSecurityScheme
-            //            {
-            //                Reference = new OpenApiReference
-            //                {
-            //                    Type = ReferenceType.SecurityScheme,
-            //                    Id = "Bearer"
-            //                }
-            //            },
-            //            new string[]{}
-            //        }
-            //    });
-            //});
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovatework API", Version = "v1" });
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Innovate work Api", Version = "v1" });
                 s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Place to add JWT with Bearer",
+                    Description = "Please enter a valid token",
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
-                s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -76,10 +66,9 @@ namespace web_Api.Extensions
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
-                            },
-                            Name = "Bearer",
+                            }
                         },
-                        new List<string>()
+                        new string[]{}
                     }
                 });
             });
@@ -119,6 +108,36 @@ namespace web_Api.Extensions
                 ValidAudience = jwtSetting.GetSection("Audience").Value,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.GetSection("SecurityKey").Value))
             });
+        }
+        public static void ConfigureServices(this IServiceCollection services)
+        {
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IIssueService, IssueService>();
+            services.AddScoped<IReaderService, ReaderService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtProvider, JwtProvider>();
+        }
+        public static void ConfigureValidators(this IServiceCollection services)
+        {
+            services.AddScoped<IValidator<Author>, AuthorValidator>();
+            services.AddScoped<IValidator<Book>, BookValidator>();
+            services.AddScoped<IValidator<Issue>, IssueValidator>();
+            services.AddScoped<IValidator<Reader>, ReaderValidator>();
+        }
+        public static void ConfigureRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IIssueRepository, IssueRepository>();
+            services.AddScoped<IReaderRepository, ReaderRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+        }
+        public static void ConfigureLogger(this IServiceCollection services)
+        {
+            services.AddScoped<ILoggerManager, LoggerManager>();
+
+            LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         }
     }
 }

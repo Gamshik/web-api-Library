@@ -1,4 +1,5 @@
 ﻿using Entities.DataTransferObjects.UserDtos;
+using Interfaces.Managers;
 using Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,23 +10,47 @@ namespace web_Api.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly ILoggerManager _loggerManager;
+        public UserController(IUserService userService, ILoggerManager loggerManager)
         {
             _userService = userService;
+            _loggerManager = loggerManager;
         }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUserAsync(UserForRegistrationDto userForRegistrationDto, CancellationToken cancellationToken = default)
         {
+            _loggerManager.LogInfo($"Request to register a user with email = '{userForRegistrationDto.Email}'!");
+
             var result = await _userService.RegisterUserAsync(userForRegistrationDto, cancellationToken);
 
-            return result.Succeeded ? StatusCode(201) : BadRequest(result);
+            if (result.Succeeded)
+            {
+                _loggerManager.LogInfo($"User with email = '{userForRegistrationDto.Email}' has been registered!");
+
+                return StatusCode(201);
+            }
+
+            _loggerManager.LogInfo($"User with email = '{userForRegistrationDto.Email}' has not been registered!");
+
+            return BadRequest(result);
         }
         [HttpPost("authorize")]
         public async Task<IActionResult> AuthorizeUserAsync(UserForAuthorizeDto userForAuthorizeDto, CancellationToken cancellationToken = default)
         {
+            _loggerManager.LogInfo($"Request to authorize a user with email = '{userForAuthorizeDto.Email}'!");
+
             var jwt = await _userService.AuthorizeAsync(userForAuthorizeDto, cancellationToken);
 
-            return jwt == null ? Unauthorized($"Invalid authenticate") : Ok(jwt);
+            if (jwt != null)
+            {
+                _loggerManager.LogInfo($"User with email = '{userForAuthorizeDto.Email}' has been authorized!");
+
+                return Ok(jwt);
+            }
+
+            _loggerManager.LogInfo($"User with email = '{userForAuthorizeDto.Email}' has not been authorized!");
+
+            return Unauthorized($"Invalid authenticate");
         }
     }
 }

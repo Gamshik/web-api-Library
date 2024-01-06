@@ -11,12 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web-Api.DAL", "Web-Api.DAL\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{AF15BAE9-4101-4A44-A9F4-801E78B4377B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-Api.BLL", "Web-Api.BLL\Web-Api.BLL.csproj", "{4B0D61F4-E059-462F-9664-8E02EF4DA021}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web-Api.BLL", "Web-Api.BLL\Web-Api.BLL.csproj", "{4B0D61F4-E059-462F-9664-8E02EF4DA021}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F869C5C0-B50E-4A88-A20A-72D7330C676A}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{11655115-E4F0-4F35-AA32-C05D7E2D5152}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{4B0D61F4-E059-462F-9664-8E02EF4DA021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B0D61F4-E059-462F-9664-8E02EF4DA021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B0D61F4-E059-462F-9664-8E02EF4DA021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11655115-E4F0-4F35-AA32-C05D7E2D5152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11655115-E4F0-4F35-AA32-C05D7E2D5152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11655115-E4F0-4F35-AA32-C05D7E2D5152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11655115-E4F0-4F35-AA32-C05D7E2D5152}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
