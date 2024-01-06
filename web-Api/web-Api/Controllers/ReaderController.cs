@@ -1,6 +1,6 @@
-﻿using Entites.DataTransferObjects.ReaderDtos;
-using Interfaces.Managers;
-using Interfaces.Services;
+﻿using Contracts.Managers;
+using Contracts.Services;
+using Entites.DataTransferObjects.ReaderDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,20 +30,20 @@ namespace web_Api.Controllers
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllReadersAsync(CancellationToken cancellationToken = default)
+        public IActionResult GetAllReaders()
         {
             _loggerManager.LogInfo("A request to obtain all readers!");
 
-            var readers = await _readerService.GetAllReadersAsync(cancellationToken);
+            var readers = _readerService.GetAllReaders();
 
             return Ok(readers);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindReaderByIdAsync(int id, CancellationToken cancellationToken)
+        public IActionResult FindReaderById(int id)
         {
             _loggerManager.LogInfo("Request to get reader by id!");
 
-            var reader = await _readerService.FindReaderByIdAsync(id, cancellationToken);
+            var reader = _readerService.FindReaderById(id);
 
             return Ok(reader);
         }

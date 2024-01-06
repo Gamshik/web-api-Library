@@ -1,12 +1,12 @@
 ﻿using Entites.DataTransferObjects.AuthorDtos;
 
-namespace Interfaces.Services
+namespace Contracts.Services
 {
     public interface IAuthorService
     {
         Task CreateAuthorAsync(AuthorForCreateDto authorForCreateDto, CancellationToken cancellationToken = default);
-        Task<IEnumerable<AuthorDto>?> GetAllAuthorAsync(CancellationToken cancellationToken = default);
-        Task<AuthorDto?> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default);
+        IEnumerable<AuthorDto> FindAuthorById(int id);
+        IEnumerable<AuthorDto> GetAllAuthor();
         Task UpdateAuthorAsync(AuthorForUpdateDto authorForUpdateDto, CancellationToken cancellationToken = default);
         Task DeleteAuthorAsync(int id, CancellationToken cancellationToken = default);
     }

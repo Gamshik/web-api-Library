@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Contracts.Managers;
+using Contracts.Providers;
+using Contracts.Repositories;
+using Contracts.Services;
 using Entites.Entities;
 using Entities.Entities;
 using FluentValidation;
-using Interfaces.Managers;
-using Interfaces.Providers;
-using Interfaces.Repositories;
-using Interfaces.Services;
 using LoggerService.Managers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +20,7 @@ using Web_Api.BLL.Services;
 using Web_Api.BLL.Validation;
 using Web_Api.DAL.Context;
 using Web_Api.DAL.Repositories;
+using Web_Api.DAL.Repositories.Manager;
 
 namespace web_Api.Extensions
 {
@@ -41,7 +42,7 @@ namespace web_Api.Extensions
                 new UserProfile(),
             }));
 
-            services.AddSingleton<IMapper>(m => new Mapper(config));
+            services.AddScoped<IMapper>(m => new Mapper(config));
         }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
@@ -127,11 +128,8 @@ namespace web_Api.Extensions
         }
         public static void ConfigureRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IIssueRepository, IssueRepository>();
-            services.AddScoped<IReaderRepository, ReaderRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
         public static void ConfigureLogger(this IServiceCollection services)
         {

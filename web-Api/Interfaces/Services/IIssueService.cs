@@ -1,12 +1,12 @@
 ﻿using Entites.DataTransferObjects.IssueDtos;
 
-namespace Interfaces.Services
+namespace Contracts.Services
 {
     public interface IIssueService
     {
         Task CreateIssueAsync(IssueForCreateDto issueForCreateDto, CancellationToken cancellationToken = default);
-        Task<IEnumerable<IssueDto>?> GetAllIssuesAsync(CancellationToken cancellationToken = default);
-        Task<IssueDto?> FindIssueByIdAsync(int id, CancellationToken cancellationToken = default);
+        IEnumerable<IssueDto> FindIssueById(int id);
+        IEnumerable<IssueDto> GetAllIssues();
         Task UpdateIssueAsync(IssueForUpdateDto issueForUpdateDto, CancellationToken cancellationToken = default);
         Task DeleteIssueAsync(int id, CancellationToken cancellationToken = default);
     }

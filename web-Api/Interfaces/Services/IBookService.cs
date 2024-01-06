@@ -1,12 +1,12 @@
 ﻿using Entites.DataTransferObjects.BookDtos;
 
-namespace Interfaces.Services
+namespace Contracts.Services
 {
     public interface IBookService
     {
         Task CreateBookAsync(BookForCreateDto bookForCreateDto, CancellationToken cancellationToken = default);
-        Task<IEnumerable<BookDto>?> GetAllBooksAsync(CancellationToken cancellationToken = default);
-        Task<BookDto?> FindBookByIdAsync(int id, CancellationToken cancellationToken = default);
+        IEnumerable<BookDto> FindBookById(int id);
+        IEnumerable<BookDto> GetAllBooks();
         Task UpdateBookAsync(BookForUpdateDto bookForUpdateDto, CancellationToken cancellationToken = default);
         Task DeleteBookAsync(int id, CancellationToken cancellationToken = default);
     }

@@ -1,6 +1,6 @@
-﻿using Entites.DataTransferObjects.BookDtos;
-using Interfaces.Managers;
-using Interfaces.Services;
+﻿using Contracts.Managers;
+using Contracts.Services;
+using Entites.DataTransferObjects.BookDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,20 +31,20 @@ namespace web_Api.Controllers
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllBooksAsync(CancellationToken cancellationToken = default)
+        public IActionResult GetAllBooks()
         {
             _loggerManager.LogInfo("A request to obtain all books!");
 
-            var books = await _bookService.GetAllBooksAsync(cancellationToken);
+            var books = _bookService.GetAllBooks();
 
             return Ok(books);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindBookByIdAsync(int id, CancellationToken cancellationToken = default)
+        public IActionResult FindBookById(int id)
         {
             _loggerManager.LogInfo("Request to get book by id!");
 
-            var book = await _bookService.FindBookByIdAsync(id, cancellationToken);
+            var book = _bookService.FindBookById(id);
 
             return Ok(book);
         }

@@ -1,6 +1,6 @@
-﻿using Entites.DataTransferObjects.IssueDtos;
-using Interfaces.Managers;
-using Interfaces.Services;
+﻿using Contracts.Managers;
+using Contracts.Services;
+using Entites.DataTransferObjects.IssueDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,20 +30,20 @@ namespace web_Api.Controllers
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllIssuesAsync(CancellationToken cancellationToken = default)
+        public IActionResult GetAllIssues()
         {
             _loggerManager.LogInfo("A request to obtain all issues!");
 
-            var issues = await _issueService.GetAllIssuesAsync(cancellationToken);
+            var issues = _issueService.GetAllIssues();
 
             return Ok(issues);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindIssueByIdAsync(int id, CancellationToken cancellationToken = default)
+        public IActionResult FindIssueById(int id)
         {
             _loggerManager.LogInfo("Request to get issue by id!");
 
-            var issue = await _issueService.FindIssueByIdAsync(id, cancellationToken);
+            var issue = _issueService.FindIssueById(id);
 
             return Ok(issue);
         }

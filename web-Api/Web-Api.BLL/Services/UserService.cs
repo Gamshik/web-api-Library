@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Contracts.Providers;
+using Contracts.Repositories;
+using Contracts.Services;
 using Entities.DataTransferObjects.UserDtos;
 using Entities.Entities;
-using Interfaces.Providers;
-using Interfaces.Repositories;
-using Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 
 namespace Web_Api.BLL.Services

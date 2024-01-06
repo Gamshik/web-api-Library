@@ -1,6 +1,6 @@
 ﻿using Entities.Entities;
 
-namespace Interfaces.Providers
+namespace Contracts.Providers
 {
     public interface IJwtProvider
     {

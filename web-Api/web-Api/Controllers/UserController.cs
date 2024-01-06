@@ -1,6 +1,6 @@
-﻿using Entities.DataTransferObjects.UserDtos;
-using Interfaces.Managers;
-using Interfaces.Services;
+﻿using Contracts.Managers;
+using Contracts.Services;
+using Entities.DataTransferObjects.UserDtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace web_Api.Controllers

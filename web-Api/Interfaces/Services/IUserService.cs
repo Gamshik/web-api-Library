@@ -2,7 +2,7 @@
 using Entities.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Interfaces.Services
+namespace Contracts.Services
 {
     public interface IUserService
     {

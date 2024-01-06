@@ -1,5 +1,5 @@
-﻿using Entities.Entities;
-using Interfaces.Repositories;
+﻿using Contracts.Repositories;
+using Entities.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Web_Api.DAL.Repositories

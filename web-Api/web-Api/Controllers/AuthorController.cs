@@ -1,6 +1,6 @@
-﻿using Entites.DataTransferObjects.AuthorDtos;
-using Interfaces.Managers;
-using Interfaces.Services;
+﻿using Contracts.Managers;
+using Contracts.Services;
+using Entites.DataTransferObjects.AuthorDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,20 +30,20 @@ namespace web_Api.Controllers
             return Ok();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAuthorsAsync(CancellationToken cancellationToken = default)
+        public IActionResult GetAuthorsAsync()
         {
             _loggerManager.LogInfo("A request to obtain all authors!");
 
-            var authors = await _authorService.GetAllAuthorAsync(cancellationToken);
+            var authors = _authorService.GetAllAuthor();
 
             return Ok(authors);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default)
+        public IActionResult FindAuthorById(int id)
         {
             _loggerManager.LogInfo("Request to get author by id!");
 
-            var author = await _authorService.FindAuthorByIdAsync(id, cancellationToken);
+            var author = _authorService.FindAuthorById(id);
 
             return Ok(author);
         }

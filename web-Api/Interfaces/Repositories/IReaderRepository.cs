@@ -1,12 +1,12 @@
 ﻿using Entites.Entities;
 
-namespace Interfaces.Repositories
+namespace Contracts.Repositories
 {
     public interface IReaderRepository
     {
-        Task CreateReaderAsync(Reader reader, CancellationToken cancellationToken);
-        Task<IQueryable<Reader>?> GetAllReadersAsync(CancellationToken cancellationToken = default);
-        Task<Reader?> FindReaderByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task CreateReaderAsync(Reader reader, CancellationToken cancellationToken = default);
+        IQueryable<Reader> FindReaderById(int id);
+        IQueryable<Reader> GetAllReaders();
         Task UpdateReaderAsync(Reader reader, CancellationToken cancellationToken = default);
         Task DeleteReaderAsync(int id, CancellationToken cancellationToken = default);
     }

@@ -1,5 +1,5 @@
-﻿using Entities.Entities;
-using Interfaces.Providers;
+﻿using Contracts.Providers;
+using Entities.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

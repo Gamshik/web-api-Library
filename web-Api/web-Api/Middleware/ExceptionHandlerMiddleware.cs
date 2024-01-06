@@ -1,5 +1,5 @@
-﻿using Entities.ErrorModels;
-using Interfaces.Managers;
+﻿using Contracts.Managers;
+using Entities.ErrorModels;
 using System.Net;
 
 namespace web_Api.Middleware
