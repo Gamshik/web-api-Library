@@ -32,7 +32,7 @@ namespace web_Api.Middleware
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = statusCode;
 
-            logger.LogError("Something went wrong " + exception.Message);
+            logger.LogError("Something went wrong: " + exception.Message);
 
             await httpContext.Response.WriteAsync(new ErrorDetails
             {

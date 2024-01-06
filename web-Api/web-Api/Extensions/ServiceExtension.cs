@@ -135,7 +135,7 @@ namespace web_Api.Extensions
         }
         public static void ConfigureLogger(this IServiceCollection services)
         {
-            services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
 
             LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         }
